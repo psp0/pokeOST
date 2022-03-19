@@ -1,0 +1,10 @@
+{
+  "name": "pokemon sound game",
+  "version": "1.0.0",
+  "dependencies": {
+    
+  },
+  "scripts":{
+    "start":"node server.js"  
+    }
+}
