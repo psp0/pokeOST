@@ -1,3 +1,10 @@
+//git config user.name "psp0"
+//git config user.email "tkdvlf9058@g.hongik.ac.kr"
+
+//git remote set-url origin https://psp0@github.com/psp0/pokeOST.git
+//git push origin master
+
+//git clone https://github.com/psp0/pokeOST.git
 var http = require("http");
 var fs = require("fs");
 var url = require("url");
@@ -19,17 +26,17 @@ function templateHTML(title, body, list) {
   `;
 }
 
-function templateList(object,root) {
+function templateList(object, root) {
   var list = "<ul>";
   var count = object.length;
   var i = 0;
-  
+
   while (i < count) {
-    if (root == '') var href = `/?id=${object[i]}`; 
+    if (root == "") var href = `/?id=${object[i]}`;
     else var href = root;
     list += `<li><a href='${href}'> ${object[i]} </a></li>`;
     i++;
-    }  
+  }
   list += "</ul>";
   return list;
 }
@@ -41,11 +48,10 @@ var app = http.createServer(function (request, response) {
 
   //enter root
   if (pathname === "/") {
-
     if (querydata.id === undefined) {
       fs.readdir("./data", function (error, dirlist) {
         var title = "home";
-        var list = templateList(dirlist,'');
+        var list = templateList(dirlist, "");
         var template = templateHTML(title, `<h1>Sound Track</h1>`, list);
         response.writeHead(200);
         response.end(template);
@@ -54,19 +60,21 @@ var app = http.createServer(function (request, response) {
     else {
       fs.readdir(`./data/${querydata.id}`, function (err, mp3) {
         var title = `${querydata.id}`;
-        var list = templateList(mp3,'./data');
-        var template = templateHTML(title,`<h6><a href='./'>Back</a></h6>`,list);
+        var list = templateList(mp3, "./data");
+        var template = templateHTML(
+          title,
+          `<h6><a href='./'>Back</a></h6>`,
+          list
+        );
         response.writeHead(200);
         response.end(template);
       }); //rd close
     } //enter querysting
-
   } //first if close
   else {
     response.writeHead(404);
     response.end("Not found");
-  }//enter other folders
-
+  } //enter other folders
 }); //app close
 
 app.listen(3001);
