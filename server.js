@@ -1,12 +1,18 @@
 //git clone https://github.com/psp0/pokeOST.git
 
+//클론하면 계정 변경 할것
 //git config user.name "psp0"
 //git config user.email "tkdvlf9058@g.hongik.ac.kr"
+
+//수정하는 법(새로 repository 파야함)
+// git filter-branch -f --env-filter "
+//     GIT_AUTHOR_NAME='psp0'
+//     GIT_AUTHOR_EMAIL='tkdvlf9058@g.hongik.ac.kr'
+//     GIT_COMMITTER_NAME='psp0'
+//     GIT_COMMITTER_EMAIL='tkdvlf9058@g.hongik.ac.kr'
+//   " HEAD
+
 //git push origin master
-
-//git push -u origin master
-//git push
-
 
 //git remote set-url origin https://psp0@github.com/psp0/pokeOST.git
 var http = require("http");
