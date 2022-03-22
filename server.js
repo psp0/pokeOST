@@ -4,40 +4,46 @@
 //git config user.email "tkdvlf9058@g.hongik.ac.kr"
 //git push origin master
 
+//git push -u origin master
+//git push
+
+
 //git remote set-url origin https://psp0@github.com/psp0/pokeOST.git
 var http = require("http");
 var fs = require("fs");
 var url = require("url");
 
-function templateHTML(title, body, list) {
-    return `
-    <!DOCTYPE html>
-    <html lang="kr">
-        <head>
-            <meta charset = "UTF-8">
-            <title>PokeOST ${title}</title>
-            <script src = "map.js"></script>
-        </head>  
-        <body>
-            ${body}
-            ${list}
-        </body>
-    </html>  
-    `;
-}
 
-function templateList(object, root) {
-    var list = "<ul>";
-    var count = object.length;
-    var i = 0;
-    while (i < count) {
-        if (root == "") var href = `/?id=${object[i]}`;
-        else var href = root;
-        list += `<li><a href='${href}'> ${object[i]} </a></li>`;
-        i++;
+var mktemplate ={
+    html:function (title, body, list) {
+        return `
+        <!DOCTYPE html>
+        <html lang="kr">
+            <head>
+                <meta charset = "UTF-8">
+                <title>PokeOST ${title}</title>
+                <script src = "map.js"></script>
+            </head>  
+            <body>
+                ${body}
+                ${list}
+            </body>
+        </html>  
+        `;
+    },
+    list:function (object, root) {
+        var list = "<ul>";
+        var count = object.length;
+        var i = 0;
+        while (i < count) {
+            if (root == "") var href = `/?id=${object[i]}`;
+            else var href = root;
+            list += `<li><a href='${href}'> ${object[i]} </a></li>`;
+            i++;
+        }
+        list += "</ul>";
+        return list;
     }
-    list += "</ul>";
-    return list;
 }
 
 var app = http.createServer(function (request, response) {
@@ -48,8 +54,8 @@ var app = http.createServer(function (request, response) {
         if (querydata.id === undefined) {
             fs.readdir("./data", function (error, dirlist) {
                 var title = "home";
-                var list = templateList(dirlist, "");
-                var template = templateHTML(title, `<h1>Sound Track</h1>`, list);
+                var list = mktemplate.list(dirlist, "");
+                var template = mktemplate.html(title, `<h1>Sound Track</h1>`, list);
                 response.writeHead(200);
                 response.end(template);
             });
@@ -57,8 +63,8 @@ var app = http.createServer(function (request, response) {
         else {
             fs.readdir(`./data/${querydata.id}`, function (err, mp3) {
                 var title = `${querydata.id}`;
-                var list = templateList(mp3, "./data");
-                var template = templateHTML(title,`<h6><a href='./'>Back</a></h6>`,list);
+                var list = mktemplate.list(mp3, "./data");
+                var template = mktemplate.html(title,`<h6><a href='./'>Back</a></h6>`,list);
                 response.writeHead(200);
                 response.end(template);
             }); //rd close
